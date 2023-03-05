@@ -1,6 +1,7 @@
 package com.bang.annotationaudit.repository;
 
 import com.bang.annotationaudit.model.Book;
+import com.bang.annotationaudit.model.exception.NotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -32,6 +33,9 @@ public class BookRepository {
     }
 
     public Book updateBook(Long id, Book book) {
+        if (!bookRepository.containsKey(id)) {
+            throw new NotFoundException("No book found");
+        }
         return bookRepository.put(id, book);
     }
 
