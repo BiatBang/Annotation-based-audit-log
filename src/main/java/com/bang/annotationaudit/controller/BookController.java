@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static com.bang.annotationaudit.model.AuditEvent.CREATE_BOOK;
+import static com.bang.annotationaudit.model.AuditEvent.DELETE_BOOK;
+import static com.bang.annotationaudit.model.AuditEvent.GET_ALL_BOOKS;
+import static com.bang.annotationaudit.model.AuditEvent.GET_BOOK;
+import static com.bang.annotationaudit.model.AuditEvent.UPDATE_BOOK;
 
 @RestController
 @RequestMapping("/books")
@@ -33,22 +37,26 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(book);
     }
 
+    @AuditableEndpoint(auditEvent = GET_ALL_BOOKS)
     @GetMapping("")
     public ResponseEntity<List<Book>> getAllBooks() {
         return ResponseEntity.status(HttpStatus.OK).body(bookRepository.getAllBooks());
     }
 
+    @AuditableEndpoint(auditEvent = GET_BOOK)
     @GetMapping("/{bookId}")
     public ResponseEntity<Book> getBookById(@PathVariable Long bookId) {
         return ResponseEntity.status(HttpStatus.OK).body(bookRepository.getBookById(bookId));
     }
 
+    @AuditableEndpoint(auditEvent = UPDATE_BOOK)
     @PatchMapping("/{bookId}")
     public ResponseEntity<Book> updateBook(@PathVariable Long bookId, @RequestBody Book book) {
         bookRepository.updateBook(bookId, book);
         return ResponseEntity.status(HttpStatus.CREATED).body(book);
     }
 
+    @AuditableEndpoint(auditEvent = DELETE_BOOK)
     @DeleteMapping("/{bookId}")
     public ResponseEntity<Book> deleteBookById(@PathVariable Long bookId) {
         bookRepository.deleteBookById(bookId);
